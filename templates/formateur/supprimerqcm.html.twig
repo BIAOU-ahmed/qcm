@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+
+	<SECTION>
+  			<CENTER> Suppression d'un QCM </CENTER>
+  		
+
+
+
+  		</select> </br>
+
+  		<div class="supr_qcm">
+  			<table>
+  				<tr class="t_entete">
+  					<th class="supr_small">Identifiant</th>
+  					<th class="supr_small-">Thème</th>
+  					<th class="co-5">Libellé</th>
+  					<th class="col-4">Auteur</th>
+  					<th class="supr_small">Suppression</th>
+  				</tr>
+  		
+
+          		{% for qcm in qcms %}
+  					<tr>
+  						<td class="center_element">{{qcm.id}}</td>
+  						<td>{{qcm.theme.description}}</td>
+  						<td>{{qcm.libelleqcm}}</td>
+  						<td class="col-2" >{{qcm.autheur.prenom}} {{qcm.autheur.nom}} </td>
+
+  						<td class="center_element">
+  							<form action="{{ path('formateur_supprqcm')}}" method="post">
+  							<input type="hidden" value="{{qcm.id}}" name="idsuppr" >
+  							<input type="submit" value="Supprimer" name="suppr">
+  						</form></td>
+  					</tr>
+  				{% endfor %}
+  			
+  			</table>
+  		</div>
+ 
+    </SECTION>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    <SECTION>
+      <CENTER> Résultats par élève </CENTER>
+
+    
+      <div class="table-g">
+        <table>
+            <tr class="t_entete">
+                <th class="col-2">Identifiant</th>
+                <th class="col-2">Nom</th>
+                <th class="col-2">Prénom</th>
+                <th class="col-2">Moyenne</th>
+                <th class="col-2">Disponibles</th>
+
+                <th class="col-2">Réalisés</th>
+            </tr>
+            {% for resultat in resultats %}
+           
+                <tr>
+                    <td class="center_element"> {{resultat.idEleve}} </td>
+                    <td> {{resultat.nom}} </td>
+                    <td> {{resultat.prenom}} </td>
+                    <td class="center_element"> {{resultat.moyenne}} </td>
+                    <td class="center_element"> {{resultat.nbrealise }} </td>
+
+                    <td class="center_element"> 
+                        {% if resultat.nbQcmRea == null %}
+                            0
+                        {% else %}
+
+                            {{resultat.nbQcmRea }} 
+                        {% endif %}
+
+                    </td>
+                </tr>
+            {% endfor %} 
+          
+        </table> 
+    </div>
+</SECTION>
+
+{% endblock %}

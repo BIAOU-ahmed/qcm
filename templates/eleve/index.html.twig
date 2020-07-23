@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello EleveController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+     <SECTION>
+      <CENTER> Tableau de bord </CENTER>
+
+
+      <CENTER>
+        <table>
+            <tr class="t_entete">
+                <th class="col-sm-1">Identifiant</th>
+                <th class="col-sm-2">Thème</th>
+                <th class="col-sm-2">Libellé</th>
+                <th class="col-sm-2">Affecté le</th>
+                <th class="col-sm-2">Note</th>
+                <th class="col-sm-2">Effectué le</th>
+                <th class="col-sm-2">Synthèse</th>
+            </tr>
+       		{% for resultateleve in resultatseleve %}
+                <tr>
+		            <td class="center_element"> {{ resultateleve.id }} </td>
+                    <td> {{ resultateleve.qcm.theme.description }} </td>
+                    <td> {{ resultateleve.qcm.libelleqcm }} </td>
+                    <td class="center_element">{{ resultateleve.affecttedAt|date("d/m/Y") }} </td>
+                    <td class="center_element"> {{ resultateleve.note }} </td>
+
+					
+                    <td class="center_element">
+                  		{% if resultateleve.realiseAt is null %}
+                           <form action="{{ path('eleve_realisation')}}" name="effectuerqcm"  method="post">
+                            <CENTER>    <input type="hidden" value="{{ resultateleve.id }}"name="idresult" > </CENTER>
+                            <CENTER> 	<input type="submit" value="Réaliser" name="effectuerqcm"> </CENTER>
+                        </form> 
+
+		                {% endif %}
+                  
+                   </td>
+						
+                    <td class="center_element">
+                    
+                        {% if resultateleve.realiseAt is not null %}
+                        <form action="synthese.php" name="Afficher" method="post" >
+                            <CENTER>    <input type="hidden" value=> </CENTER>
+                            <CENTER>    <input type="submit" value="Afficher" name="Afficher"> </CENTER>
+                        </form>
+
+                		{% endif %}
+                	</td>
+            </tr>
+        {% endfor %}
+       
+    </table> 
+</CENTER>
+
+</SECTION>
+{% endblock %}

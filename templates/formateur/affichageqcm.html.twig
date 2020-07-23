@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+
+       <CENTER> Affichage d'un QCM </CENTER>
+
+
+
+
+	<form action="{{ path('formateur_afficheqcm')}}"  method="post" name="affichqcm">
+		<div class="qcm"> 
+	    Sélection d'un QCM : <select class="w-50 form-control-sm" name="qcm">
+	      {% for qcm in qcms %}
+	        <option value="{{qcm.id}}"> {{qcm.theme.description}}  : {{qcm.libelleqcm}} </option>
+
+	      {% endfor %}
+	    
+
+
+	    </select> 
+	  
+	  <input class="ml-5" type="submit" value="Valider" name="affiche">	
+	  </div>
+	</form>
+
+
+  {% if type=='reaffiche' %}
+
+  	       <label class="numq"> QCM N°: {{ qcmsafficheentete.id }} </label> <label class="ml-5"> Libellé : {{ qcmsafficheentete.libelleqcm }}  </label> <label class="ml-5">  Thème :{{ qcmsafficheentete.theme.description }}   </label> <label class="ml-5"> Nombre de question : {{nbques}} </label> </br>
+			
+			{% set numquestion = 1 %}
+			{% for qcmaffiche in qcmsaffiche %}
+
+
+				<div class="ml-5">Question N° {{ numquestion }} /{{nbques}} </div></br>
+				<div class="qtion"> {{ qcmaffiche.libellequestion }} </div> </br>
+				
+
+				{% for propo in qcmaffiche.propositions %}
+				<div class="prop">
+
+					{% if propo.resultatvraifaux==0 %}
+					<input  type="checkbox"  name="scales"
+					onclick="return false">
+					{% elseif propo.resultatvraifaux=='1' %}
+						<input  type="checkbox"  name="scales" onclick="return false"
+						checked>
+					{% endif %}
+					<label for="scales"> {{ propo.libelleproposition }} </label>
+	        
+	      		</div>
+
+	  			{% endfor %}
+
+				{% set numquestion = numquestion + 1 %}
+	  		{% endfor %}
+  		
+     
+  {% endif %}
+
+
+
+{% endblock %}

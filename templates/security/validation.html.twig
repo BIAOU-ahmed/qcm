@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/flatly/bootstrap.min.css">
+        
+	<title>Document</title>
+</head>
+<body>
+	
+	{% block body %}
+    <div class="card mt-3">
+        <div class="card-body">
+         Bonjour  {{app.user.prenom}} cliquez sur le bouton <label class="info"> ENTRER </label></br> pour continuer sur l'application QCM .
+
+     		{% if is_granted('ROLE_ADMIN') %}
+				<a href="{{ path('formateur_accueil')}}" class="btn btn-primary">Entrer</a>
+      			
+        	{% elseif is_granted('ROLE_USER') %}
+				<a href="{{ path('eleve_accueil')}}" class="btn btn-primary">Entrer</a>
+			{% endif %}
+	
+			
+    	</div>
+	</div>
+		
+{% endblock %}
+</body>
+</html>
+

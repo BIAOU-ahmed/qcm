@@ -1,0 +1,53 @@
+
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<form action="{{ path('formateur_afecttUti')}}"  method="post" name="affecter">
+  <div class="qcm"> 
+    Sélection d'un QCM : <select class="w-50 form-control-sm" name="qcm">
+      {% for qcm in qcms %}
+        <option value="{{qcm.id}}"> {{qcm.theme.description}}  : {{qcm.libelleqcm}} </option>
+
+      {% endfor %}
+    
+
+
+  </select> </br>
+  </div>
+
+  <div class="date">
+    Date : <input name="date" type="date" value="{{ "now"|date("Y-m-d") }}" >
+
+  </div>
+
+    <div class="table-g">
+
+        <table >
+          <tr class="t_entete">
+            <th class="col-2">Identifiant</th>
+            <th class="col-2">Nom</th>
+            <th class="col-2">Prénom</th>
+            <th class="col-2">Type</th>
+            <th class="col-2">Affectation</th>
+          </tr>
+          {% for eleve in eleves %}
+
+            <tr>
+              <td class="center_element"> {{eleve.id}} </td>
+              <td> {{eleve.nom}} </td>
+              <td> {{eleve.prenom}} </td>
+              <td> {{eleve.type}} </td>
+              <td class="center_element"><input  type="checkbox"  name="utili[]" value="{{eleve.id}}"
+                ></td>
+              </tr>
+            {% endfor %} 
+
+        </table>
+
+    </div>
+
+  <CENTER> <input type="submit" value="Valider" name="affecter"> </CENTER>	
+</form>
+
+{% endblock %}

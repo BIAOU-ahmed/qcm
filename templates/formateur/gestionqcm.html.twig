@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+<SECTION>
+	<CENTER> Gestion des QCM </CENTER>
+
+	<div class="container mt-5">
+		<div class="row">
+			<div class="col">
+				<a href="{{ path('formateur_afficheqcm') }}" class="btn btn-primary">Afficher un qcm</a>
+				<img class="mt-5 ml-5 " src="{{ asset('static/afficher.png') }}"  height="auto" width="30%"> 
+			</div>
+			<div class="col">
+				<a href="" class="btn btn-primary">Ajouter un Qcm</a>
+				<img class="mt-5 ml-5 " src="{{ asset('static/ajouter.png') }}"   height="auto" width="30%"> 
+			</div>
+			<div class="col">
+				<a href="" class="btn btn-primary">Modifier un Qcm</a>
+				<img class="mt-5 ml-5 " src="{{ asset('static/modif.png') }}"   height="auto" width="30%"> 
+			</div>
+			<div class="col">
+				<a href="{{ path('formateur_supprqcm') }}" class="btn btn-primary">Supprimer un Qcm</a>
+				<img class="mt-5 ml-5" src="{{ asset('static/supprimer.png') }}"  height="auto" width="30%"> 
+			</div>
+		</div>
+	</div>
+
+</SECTION>
+
+{% endblock %}

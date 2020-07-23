@@ -1,0 +1,154 @@
+header
+{
+	font-size: 16px;
+	background: #049b9b;
+	
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border: 1px solid black;
+
+}
+.presentation{
+	font-size: 16px;
+	padding-right: 20%;
+
+}
+
+.menu{
+	padding-left: 3%;
+	padding-right: 3%;
+
+}
+nav
+{
+	font-size: 16px;
+	background: #04940a;
+	
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border: 1px solid black;
+
+}
+nav.lien
+{
+
+	margin-bottom: 40px;
+
+}
+
+a{
+	
+	text-decoration: none;
+	color: Black;
+}
+
+
+table
+{
+	border-collapse: collapse;
+	font-size: 14px;
+
+}
+th,
+td
+{
+	
+	border: 1px solid black;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	padding-left: 6px;
+}
+th
+{
+	padding-left: 15px;
+	padding-right: 15px;
+}
+.card{
+
+	margin: auto;
+	width: 35%;
+}
+.mdp{
+
+	padding-left: 30%;
+}
+
+.login{
+
+	padding-left: 42%;
+}
+
+.info{
+
+	color: red;
+}
+h5{
+	margin-top: 10%;
+}
+.t_entete{
+	background: #4d3a3a4d;
+}
+
+.table-g{
+	margin-top: 2%;
+	margin-left: 25%;
+	margin-bottom: 10px;
+	font-size:25px;
+}
+.qcm{
+	margin-left: 22%;
+	margin-bottom: 20px;
+}
+.date{
+	margin-left: 31%;
+}
+.center_element{
+	text-align: center;
+}
+.prop{
+	padding-left: 150px;
+}
+.qtion{
+	padding-left: 100px;
+}
+.numq{
+	padding-left: 25%;
+}
+#chrono{
+	float: right;
+	color: red;
+	margin-right: 5%;
+}
+.reali{
+	float: right;
+	margin-right: 22%;
+
+}
+
+
+.tr{
+	 display:table-row; 
+}
+.td{
+	
+	 display:table-cell; 
+	border: 1px solid black;
+	width: 100px;
+
+}
+.synt_resume{
+	margin-top: 3%;
+	margin-left: 25%;
+	display: inline;
+}
+.table_synt{
+	margin-left: 27%;
+	margin-bottom: 3%;
+}
+.supr_qcm{
+	margin-left: 28%;
+}
+.supr_small{
+	width: auto;
+}
+
