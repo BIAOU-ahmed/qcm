@@ -3,44 +3,41 @@
 
 {% block body %}
 
-    <SECTION>
-      <CENTER> Résultats par élève </CENTER>
+    <div class="container">
 
-    
-      <div class="table-g">
-        <table>
-            <tr class="t_entete">
-                <th class="col-2">Identifiant</th>
-                <th class="col-2">Nom</th>
-                <th class="col-2">Prénom</th>
-                <th class="col-2">Moyenne</th>
-                <th class="col-2">Disponibles</th>
 
-                <th class="col-2">Réalisés</th>
-            </tr>
-            {% for resultat in resultats %}
-           
-                <tr>
-                    <td class="center_element"> {{resultat.idEleve}} </td>
-                    <td> {{resultat.nom}} </td>
-                    <td> {{resultat.prenom}} </td>
-                    <td class="center_element"> {{resultat.moyenne}} </td>
-                    <td class="center_element"> {{resultat.nbrealise }} </td>
+        <SECTION>
+          <CENTER> Résultats par élève </CENTER>
 
-                    <td class="center_element"> 
-                        {% if resultat.nbQcmRea == null %}
-                            0
-                        {% else %}
-
-                            {{resultat.nbQcmRea }} 
-                        {% endif %}
-
-                    </td>
+          <div class="mt-3 table-responsive ">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Moyenne</th>
+                    <th scope="col">Disponibles</th>
+                    <th scope="col">Réalisés</th>
                 </tr>
-            {% endfor %} 
-          
-        </table> 
-    </div>
+            </thead>
+            <tbody>
+                {% for resultat in resultats %}
+                  <tr>
+                    <th scope="row">{{resultat.idEleve}}</th>
+                    <td>{{resultat.nom}}</td>
+                    <td>{{resultat.prenom}}</td>
+                    <td>{{resultat.moyenne}}</td>
+                    <td>{{resultat.nbrealise }}</td>
+                    <td>{{ resultat.nbQcmRea == null ? 0 :  resultat.nbQcmRea }}</td>
+                </tr>
+            {% endfor %}  
+        </tbody>
+    </table>
+</div>
 </SECTION>
+</div>
+
+
 
 {% endblock %}

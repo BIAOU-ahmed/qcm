@@ -6,86 +6,10 @@
         {% block stylesheets %}  {{ encore_entry_link_tags('app') }}  {% endblock %}
     </head>
     <body>
-	<nav class="navbar navbar-expand navbar-light bg-light">
-		  <a class="presentation navbar-brand mr-5" href="#">Application QCM</a>
-		  
-		  <div class="collapse navbar-collapse" id="navbarNav">
-		      <label class="presentation">
-		      	
-		       Utilisateur : {# {{app.user.nom}} {{app.user.prenom}} #}
-		      </label> 
-		      <label class="presentation">
-		      	
-		       Type : {# {{app.user.type}} #}
-		      </label>  
-		      </li>
-		  </div>
-	</nav>
-	{% if is_granted('ROLE_USER') %}
-	  	<nav class="lien navbar navbar-expand-lg navbar-dark bg-primary">
-
-    		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-    			<span class="navbar-toggler-icon"></span>
-    		</button>
-
-    		<div class="collapse navbar-collapse" id="navbarColor01">
-    			<ul class="navbar-nav mr-auto">
-					
-			
-					<li class="nav-item">
-						
-  						<a class="nav-link" href="logout.php">  se deconnecter </a> 
-					</li>
-
-    			</ul>
-    		</div>
-    	</nav>
-	{% endif %}
-	{% if is_granted('ROLE_ADMIN') %}
-	  	<nav class="lien navbar navbar-expand-lg navbar-dark bg-primary">
-
-    		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-    			<span class="navbar-toggler-icon"></span>
-    		</button>
-
-    		<div class="collapse navbar-collapse" id="navbarColor01">
-    			<ul class="navbar-nav mr-auto">
-					
-					<li class="nav-item">
-  						<a class="nav-link" href=" {{ path('formateur_afecttUti') }} " > Affectation d'un QCM </a> -
-						
-					</li>
-					
-					<li class="nav-item">
-						
-  						<a class="nav-link" href="{{ path('formateur_resueleve') }}" >  Résultats</a> 
-
-					</li>
-
-					<li class="nav-item">
-						
-  						<a class="nav-link" href="{{ path('formateur_gestionqcm') }}" >  Gestiondes QCM </a> 
-
-					</li>
-				
-					
-					<li class="nav-item">
-						
-  						<a class="nav-link" href="{{ path('formateur_listUti') }}" >  Gestion des comptes</a> 
-					</li>
-					<li class="nav-item">
-						
-  						<a class="nav-link" >  Gestion des groupes </a> 
-					</li>
-					<li class="nav-item">
-						
-  						<a class="nav-link" href="logout.php">  se deconnecter </a> 
-					</li>
-
-    			</ul>
-    		</div>
-    	</nav>
-	{% endif %}
+		
+		
+        {{include('layouts/partials/_flash_messages.html.twig')}}
+		{{include('layouts/partials/_nav.html.twig')}}
         {% block body %}{% endblock %}
         {% block javascripts %}
 			

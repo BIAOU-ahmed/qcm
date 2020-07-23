@@ -2,62 +2,75 @@
 
 {% block title %}Hello EleveController!{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-     <SECTION>
-      <CENTER> Tableau de bord </CENTER>
+    {% block body %}
+        <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        </style>
 
 
-      <CENTER>
-        <table>
-            <tr class="t_entete">
-                <th class="col-sm-1">Identifiant</th>
-                <th class="col-sm-2">Thème</th>
-                <th class="col-sm-2">Libellé</th>
-                <th class="col-sm-2">Affecté le</th>
-                <th class="col-sm-2">Note</th>
-                <th class="col-sm-2">Effectué le</th>
-                <th class="col-sm-2">Synthèse</th>
-            </tr>
-       		{% for resultateleve in resultatseleve %}
-                <tr>
-		            <td class="center_element"> {{ resultateleve.id }} </td>
-                    <td> {{ resultateleve.qcm.theme.description }} </td>
-                    <td> {{ resultateleve.qcm.libelleqcm }} </td>
-                    <td class="center_element">{{ resultateleve.affecttedAt|date("d/m/Y") }} </td>
-                    <td class="center_element"> {{ resultateleve.note }} </td>
+        <div class="container">
 
-					
-                    <td class="center_element">
-                  		{% if resultateleve.realiseAt is null %}
-                           <form action="{{ path('eleve_realisation')}}" name="effectuerqcm"  method="post">
-                            <CENTER>    <input type="hidden" value="{{ resultateleve.id }}"name="idresult" > </CENTER>
-                            <CENTER> 	<input type="submit" value="Réaliser" name="effectuerqcm"> </CENTER>
-                        </form> 
 
-		                {% endif %}
-                  
-                   </td>
-						
-                    <td class="center_element">
-                    
-                        {% if resultateleve.realiseAt is not null %}
-                        <form action="synthese.php" name="Afficher" method="post" >
-                            <CENTER>    <input type="hidden" value=> </CENTER>
-                            <CENTER>    <input type="submit" value="Afficher" name="Afficher"> </CENTER>
-                        </form>
+            <SECTION>
+               <CENTER> Suppression d'un QCM </CENTER>
 
-                		{% endif %}
-                	</td>
-            </tr>
-        {% endfor %}
-       
-    </table> 
-</CENTER>
+               <div class="mt-3 table-responsive ">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Identifiant</th>
+                        <th scope="col">Thème</th>
+                        <th scope="col">Libellé</th>
+                        <th scope="col">Affecté le</th>
+                        <th scope="col">Note</th>
+                        <th scope="col">Effectué</th>
+                        <th scope="col">Synthèse</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for resultateleve in resultatseleve %}
+                      <tr>
+                        <th scope="row">{{ resultateleve.id }}
 
+
+
+
+
+                         
+
+                        </th>
+                        <td>{{ resultateleve.qcm.theme.description }}</td>
+                        <td>{{ resultateleve.qcm.libelleqcm }}</td>
+                        <td>{{ resultateleve.affecttedAt|date("d/m/Y") }}</td>
+                        <td>{{ resultateleve.note }}</td>
+                        <td>
+                            {% if resultateleve.realiseAt is null %}
+                                <form action="{{ path('eleve_realisation')}}" name="effectuerqcm"  method="post">
+                                    <CENTER>    <input type="hidden" value="{{ resultateleve.id }}"name="idresult" > </CENTER>
+                                    <CENTER>    <input type="submit" value="Réaliser" name="effectuerqcm"> </CENTER>
+                                </form> 
+
+                            {% endif %}
+
+                        </td>
+                        <td>
+                            {% if resultateleve.realiseAt is not null %}
+                                <form action="synthese.php" name="Afficher" method="post" >
+                                    <CENTER>    <input type="hidden" value=> </CENTER>
+                                    <CENTER>    <input type="submit" value="Afficher" name="Afficher"> </CENTER>
+                                </form>
+
+                            {% endif %}
+
+                            
+                        </td>
+                    </tr>
+                {% endfor %}  
+            </tbody>
+        </table>
+    </div>
 </SECTION>
+</div>
+
 {% endblock %}

@@ -14,6 +14,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -28,9 +29,9 @@ class FormateurController extends AbstractController
      */
     public function index()
     {
-        return $this->render('formateur/index.html.twig', [
-            'controller_name' => 'FormateurController',
-        ]);
+    	return $this->render('formateur/index.html.twig', [
+    		'controller_name' => 'FormateurController',
+    	]);
     }
     /**
      * @Route("/utilisateurs", name="listUti")
@@ -40,10 +41,10 @@ class FormateurController extends AbstractController
 
     	$utilisateurs = $user->findall();
 
-        return $this->render('formateur/utilisateurs.html.twig',[
-			'controller_name' => 'BlogController',
-			'utilisateurs' => $utilisateurs
-		]);
+    	return $this->render('formateur/utilisateurs.html.twig',[
+    		'controller_name' => 'BlogController',
+    		'utilisateurs' => $utilisateurs
+    	]);
     }
 
     /**
@@ -55,10 +56,10 @@ class FormateurController extends AbstractController
     	$resultatseleve = $user->findAllResultat();
 
     	dump($resultatseleve);
-        return $this->render('formateur/resultat.html.twig',[
-			'controller_name' => 'BlogController',
-			'resultats' => $resultatseleve
-		]);
+    	return $this->render('formateur/resultat.html.twig',[
+    		'controller_name' => 'BlogController',
+    		'resultats' => $resultatseleve
+    	]);
     }
 
     /**
@@ -68,69 +69,109 @@ class FormateurController extends AbstractController
     {
 
     	$eleves = $user->findBy(
-				    ['type' => 'Eleve'],
-				);
+    		['type' => 'Eleve'],
+    	);
     	$qcms = $qcm->findall();
 
 
     	if (isset($_POST['affecter'])) {
-	    	if (isset($_POST['utili'])) {
+    		if (isset($_POST['utili'])) {
 
-		    	dump($_POST['qcm']);
-		    	foreach($_POST['utili'] as $valeur){
-			        
-			        $time = new \DateTime($_POST['date']);
-			        $id = $_POST['utili'] ;
-			        dump($valeur);
-			        $eleve = $user->find($valeur);
-			        dump($eleve);
-			        $newQcm = $qcm->find($_POST['qcm']);
-			        dump($newQcm);
-		    		dump($_POST['date']);
-			        $enseignant = $this->getUser();
-			        dump($enseignant);
-		    		$resultat = new Resultat();
+    			dump($_POST['qcm']);
+    			foreach($_POST['utili'] as $valeur){
 
-		    		$resultat->setAffecttedAt($time)
-		    					->setEnseignant($enseignant)
-		    					->setEleve($eleve)
-		    					->setQcm($newQcm)
-		    					;
-		    		dump($resultat);
+    				$time = new \DateTime($_POST['date']);
+    				$id = $_POST['utili'] ;
+    				dump($valeur);
+    				$eleve = $user->find($valeur);
+    				dump($eleve);
+    				$newQcm = $qcm->find($_POST['qcm']);
+    				dump($newQcm);
+    				dump($_POST['date']);
+    				$enseignant = $this->getUser();
+    				dump($enseignant);
+    				$resultat = new Resultat();
 
-		    		$em->Persist($resultat);
-		    	}
+    				$resultat->setAffecttedAt($time)
+    				->setEnseignant($enseignant)
+    				->setEleve($eleve)
+    				->setQcm($newQcm)
+    				;
+    				dump($resultat);
 
-				$em->flush();
-	    	}
+    				$em->Persist($resultat);
+    			}
+
+    			$em->flush();
+    		}
     	}
 
-        return $this->render('formateur/afectation.html.twig',[
-			'controller_name' => 'BlogController',
-			'eleves' => $eleves,
-			'qcms' => $qcms
-		]);
+    	return $this->render('formateur/afectation.html.twig',[
+    		'controller_name' => 'BlogController',
+    		'eleves' => $eleves,
+    		'qcms' => $qcms
+    	]);
     }
 
     /**
      * @Route("/utilisateurs/new", name="ajoutUti")
-	 * @Route("/utilisateurs/{id}/edit", name="editUti")
      */
-    public function create(User $user = null, Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder)
+    public function create( Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder)
     {
 
-    	if(!$user){
+    	
+    	$user = new user();
 
-			$user = new user();
 
-		}
 
     	
     	$form = $this->createForm(AjoutUtilisateurType::class, $user);
 
     	$form->handleRequest($request);
-		
-		if($form->isSubmitted() && $form->isValid()){
+
+    	if($form->isSubmitted() && $form->isValid()){
+
+
+    		$hash = $encoder->encodePassword($user,$user->getPassword());
+
+    		$user->setPassword($hash);
+
+    		if($user->getType()=='Formateur'){
+
+    			$user->setRoles(array('ROLE_ADMIN'));
+    		}
+    		elseif ($user->getType()=='Eleve') {
+
+    			$user->setRoles(array('ROLE_USER'));
+    		}
+
+
+    		$em->Persist($user);
+    		$em->flush();
+
+    		return $this->redirectToRoute('formateur_listUti');
+    	}
+
+    	return $this->render('formateur/create.html.twig',[
+    		'formUser' => $form->createView()
+    	]);
+    }
+
+    /**
+	 * @Route("/user/{id}/edit", name="editUti", methods={"GET", "PUT"})
+     */
+    public function edit(User $user , Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder)
+    {
+
+
+    	$form = $this->createForm(AjoutUtilisateurType::class, $user, [
+    		'method' => 'PUT'
+
+    	]);
+
+    	$form->handleRequest($request);
+
+    	if($form->isSubmitted() && $form->isValid()){
 
 			// if(!$user->getId()){
 
@@ -138,33 +179,48 @@ class FormateurController extends AbstractController
 
 			// }
 
-			$hash = $encoder->encodePassword($user,$user->getPassword());
-   			
-   			$user->setPassword($hash);
+    		$hash = $encoder->encodePassword($user,$user->getPassword());
 
-   			if($user->getType()=='Formateur'){
+    		$user->setPassword($hash);
 
-   				$user->setRoles(array('ROLE_ADMIN'));
-   			}
-   			elseif ($user->getType()=='Eleve') {
-   				
-   				$user->setRoles(array('ROLE_USER'));
-   			}
-			
+    		if($user->getType()=='Formateur'){
 
-			$em->Persist($user);
-			$em->flush();
+    			$user->setRoles(array('ROLE_ADMIN'));
+    		}
+    		elseif ($user->getType()=='Eleve') {
 
-			return $this->redirectToRoute('formateur_listUti');
-		}
+    			$user->setRoles(array('ROLE_USER'));
+    		}
 
-        return $this->render('formateur/create.html.twig',[
-			'formUser' => $form->createView(),
-			'editMode' => $user->getId() !== null
-		]);
+
+    		$em->flush();
+
+    		return $this->redirectToRoute('formateur_listUti');
+    	}
+
+    	return $this->render('formateur/edit.html.twig',[
+    		'formUser' => $form->createView(),
+    	]);
     }
 
 
+
+  	/**
+     * @Route("/user/{id<[0-9]+>}", name="delete_user", methods={"GET",})
+     */
+  	public function deleteUser(Request $request, User $user, EntityManagerInterface $em):Response
+  	{
+
+  		if(count($user->getQcms())==0){
+  			$em->remove($user);
+  			$em->flush();
+
+  			$this->addFlash('info', 'User successfully deleted!');
+
+  		}
+
+  		return $this->redirectToRoute('formateur_listUti');
+  	}
 
     /**
      * @Route("/gestionqcm", name="gestionqcm")
@@ -173,9 +229,9 @@ class FormateurController extends AbstractController
     {
 
     	
-        return $this->render('formateur/gestionqcm.html.twig',[
-			'controller_name' => 'BlogController',
-		]);
+    	return $this->render('formateur/gestionqcm.html.twig',[
+    		'controller_name' => 'BlogController',
+    	]);
     }
 
     /**
@@ -189,64 +245,79 @@ class FormateurController extends AbstractController
 
     	if (isset($_POST['affiche'])) {
 
-	       
-	       $nbquestion = $qcm->nbquestiondispo($_POST['qcm']);
-	       $qcmafficheentete  = $qcm->find($_POST['qcm']);
-	       $questionaffiche = $question->findBy(
-				    ['qcm' => $qcmafficheentete],
-				);
-	       $propoaffiche = $propo->findBy(
-				    ['question' => $questionaffiche],
-				);
-	       $qcmaffiche = $qcm->qcmaffiche($_POST['qcm']);
-	       dump($qcmaffiche);
 
-	       return $this->render('formateur/affichageqcm.html.twig',[
-			'controller_name' => 'BlogController',
-			'type' => 'reaffiche',
-			'qcms' => $qcms,
-			'nbques' => $nbquestion[0]['nbquestion'],
-			'qcmsafficheentete' => $qcmafficheentete,
-			'qcmsaffiche' => $questionaffiche,
-			]);
-	    	
-		}
+    		$nbquestion = $qcm->nbquestiondispo($_POST['qcm']);
+    		$qcmafficheentete  = $qcm->find($_POST['qcm']);
+    		$questionaffiche = $question->findBy(
+    			['qcm' => $qcmafficheentete],
+    		);
+    		$propoaffiche = $propo->findBy(
+    			['question' => $questionaffiche],
+    		);
+    		$qcmaffiche = $qcm->qcmaffiche($_POST['qcm']);
+    		dump($qcmaffiche);
 
-        return $this->render('formateur/affichageqcm.html.twig',[
-			'controller_name' => 'BlogController',
-			'type' => 'entete',
-			'qcms' => $qcms
-		]);
+    		return $this->render('formateur/affichageqcm.html.twig',[
+    			'controller_name' => 'BlogController',
+    			'type' => 'reaffiche',
+    			'qcms' => $qcms,
+    			'nbques' => $nbquestion[0]['nbquestion'],
+    			'qcmsafficheentete' => $qcmafficheentete,
+    			'qcmsaffiche' => $questionaffiche,
+    		]);
+
+    	}
+
+    	return $this->render('formateur/affichageqcm.html.twig',[
+    		'controller_name' => 'BlogController',
+    		'type' => 'entete',
+    		'qcms' => $qcms
+    	]);
     }
 
     /**
      * @Route("/supprimerqcm", name="supprqcm")
      */
-    public function supprimerqcm(QcmRepository $qcm, EntityManagerInterface $em)
+    public function supprimerqcm(Request $request, Qcm $qcmsupr=null,QcmRepository $qcm, EntityManagerInterface $em)
     {
 
     	
     	$qcms = $qcm->findall();
 
-		if (isset($_POST['suppr'])) {
+		// if (isset($_POST['suppr'])) {
 
-	        $entityManager = $this->getDoctrine()->getManager();
-        	$delqcm = $entityManager->getRepository(QCM::class)->find($_POST['idsuppr']);
-        	$nbassigneqcm = $qcm->findnbassigne($_POST['idsuppr']);
-        	dump($nbassigneqcm[0]['nbassigne']);
+	 //        $entityManager = $this->getDoctrine()->getManager();
+  //       	$delqcm = $entityManager->getRepository(QCM::class)->find($_POST['idsuppr']);
+  //       	$nbassigneqcm = $qcm->findnbassigne($_POST['idsuppr']);
+  //       	dump($nbassigneqcm[0]['nbassigne']);
+		// 	dd($qcmsupr);
+  //       	$em->remove($qcmsupr);
+		// 	$em->flush();
 
-   //      	$entityManager->remove($qcm);
-			// $entityManager->flush();
+		// 	return $this->redirectToRoute('formateur_supprqcm');
+	 //    	$this->addFlash('info', 'User successfully deleted!');
+		// }
 
-			// return $this->redirectToRoute('formateur_supprqcm');
-	    	
-		}
-
-        return $this->render('formateur/supprimerqcm.html.twig',[
-			'controller_name' => 'BlogController',
-			'qcms' => $qcms
-		]);
+    	return $this->render('formateur/supprimerqcm.html.twig',[
+    		'qcms' => $qcms
+    	]);
     }
 
+	/**
+     * @Route("/deleteqcm/{id<[0-9]+>}", name="deleteqcm", methods={"GET",})
+     */
+	public function deleteQcm(Request $request, Qcm $qcm, EntityManagerInterface $em):Response
+	{
+
+		
+
+		$em->remove($qcm);
+		$em->flush();
+
+		$this->addFlash('info', 'Qcm successfully deleted!');
+
+		
+		return $this->redirectToRoute('formateur_supprqcm');
+	}
 
 }

@@ -4,43 +4,47 @@
 {% block body %}
 
 
-	<SECTION>
-  			<CENTER> Suppression d'un QCM </CENTER>
-  		
+	
+
+    <div class="container">
 
 
+        <SECTION>
+         <CENTER> Suppression d'un QCM </CENTER>
 
-  		</select> </br>
+         <div class="mt-3 table-responsive ">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Identifiant</th>
+                <th scope="col">Thème</th>
+                <th scope="col">Libellé</th>
+                <th scope="col">Auteur</th>
+                <th scope="col">Suppression</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for qcm in qcms %}
+              <tr>
+                <th scope="row">{{qcm.id}}
 
-  		<div class="supr_qcm">
-  			<table>
-  				<tr class="t_entete">
-  					<th class="supr_small">Identifiant</th>
-  					<th class="supr_small-">Thème</th>
-  					<th class="co-5">Libellé</th>
-  					<th class="col-4">Auteur</th>
-  					<th class="supr_small">Suppression</th>
-  				</tr>
-  		
+                </th>
+                <td>{{qcm.theme.description}}</td>
+                <td>{{qcm.libelleqcm}}</td>
+                <td>{{qcm.autheur.prenom}} {{qcm.autheur.nom}}</td>
+                <td>
+                    <a href="{{ path('formateur_deleteqcm', {'id':qcm.id}) }}" onclick=" confirm('Are you sure ?') && 
+                                    document.getElementById('js-user-delete-form').submit(); " class="btn btn-primary"> Delete </a>
 
-          		{% for qcm in qcms %}
-  					<tr>
-  						<td class="center_element">{{qcm.id}}</td>
-  						<td>{{qcm.theme.description}}</td>
-  						<td>{{qcm.libelleqcm}}</td>
-  						<td class="col-2" >{{qcm.autheur.prenom}} {{qcm.autheur.nom}} </td>
+                    
+                </td>
+            </tr>
+        {% endfor %}  
+    </tbody>
+</table>
+</div>
+</SECTION>
+</div>
 
-  						<td class="center_element">
-  							<form action="{{ path('formateur_supprqcm')}}" method="post">
-  							<input type="hidden" value="{{qcm.id}}" name="idsuppr" >
-  							<input type="submit" value="Supprimer" name="suppr">
-  						</form></td>
-  					</tr>
-  				{% endfor %}
-  			
-  			</table>
-  		</div>
- 
-    </SECTION>
 
 {% endblock %}

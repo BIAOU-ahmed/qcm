@@ -1,0 +1,43 @@
+
+{{ form_start(formUser) }}
+<div class="form-group input-group">
+	<div class="input-group-prepend">
+		<span class="input-group-text"> <i class="fa fa-user"></i> </span>
+	</div>
+
+	{{ form_widget(formUser.username, {'attr': {'class': 'form-control','placeholder':"Username"},}) }}
+
+</div> <!-- form-group// -->
+
+<div class="form-group input-group">
+	<div class="input-group-prepend">
+		<span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+	</div>
+	{{ form_widget(formUser.password, {'attr': {'class': 'form-control','placeholder':"Password"},}) }}
+</div> <!-- form-group// -->
+
+<div class="form-group input-group">
+	<div class="input-group-prepend">
+		<span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+	</div>
+	{{ form_widget(formUser.nom, {'attr': {'class': 'form-control','placeholder':"Nom"},}) }}
+</div> <!-- form-group// -->
+
+<div class="form-group input-group">
+	<div class="input-group-prepend">
+		<span class="input-group-text"> <i class="fa fa-building"></i> </span>
+	</div>
+	{{ form_widget(formUser.prenom, {'attr': {'class': 'form-control','placeholder':"Prenom"},}) }}
+</div> <!-- form-group end.// -->
+
+<div class="form-group input-group">
+	<div class="input-group-prepend">
+		<span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+	</div>{{ form_widget(formUser.type, {'attr': {'class': 'form-control','placeholder':"Type"},}) }}
+</div> <!-- form-group// -->
+
+<div class="form-group">
+	
+	<input type="submit" value="{{ submitButtonText ?? 'Create Account' }}" class="btn btn-primary btn-block" formnovalidate>
+</div> <!-- form-group// -->
+{{form_end(formUser)}}

@@ -70,17 +70,17 @@ class User implements UserInterface
     private $type;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Qcm", mappedBy="autheur")
+     * @ORM\OneToMany(targetEntity="App\Entity\Qcm", mappedBy="autheur", cascade={"persist"})
      */
     private $qcms;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Resultat", mappedBy="Enseignant")
+     * @ORM\OneToMany(targetEntity="App\Entity\Resultat", mappedBy="Enseignant", cascade={"persist"})
      */
     private $resultats;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Appartenir", mappedBy="idUser")
+     * @ORM\OneToMany(targetEntity="App\Entity\Appartenir", mappedBy="idUser",cascade={"persist"})
      */
     private $appartenirs;
 
