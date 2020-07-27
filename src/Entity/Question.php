@@ -2,8 +2,13 @@
 
 namespace App\Entity;
 
+use App\Entity\Proposition;
+use App\Entity\Question;
+use App\Entity\Reponse;
+use App\Entity\Resultat;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -119,4 +124,96 @@ class Question
 
         return $this;
     }
+
+
+public function CalculPointsQuestion(Question $question,Resultat $resultat)
+ {
+   $po = $question->getPropositions();
+   $propoqcm = $question->getQcm();
+
+    static $point;
+    static $reponse;
+    static $mauvaise_reponse=0;
+    static $bonne_reponse=0;
+    foreach ($po as  $value) {
+        foreach ($value->getReponses() as  $reps) {
+            if ($reps->getIdResultat()->getId()== $resultat->getId() && $reps->getIdProposition()->getId() == $value->getId()) {
+                $reponse =$reps;
+            }
+        }
+        
+        
+
+        if ($reponse == [])
+        { 
+            $point = 0;
+
+            return $point;
+
+        }else{
+            dump('val resu '.$value->getResultatVraiFaux());
+            dump($reponse);
+            if($value->getResultatVraiFaux()==$reponse->getReponseEleve()){
+               
+              $bonne_reponse +=1 ;
+              // dump('bon rep '.$bonne_reponse);
+
+        }else{
+            $mauvaise_reponse++;
+            // dump('faux rep '.$mauvaise_reponse);
+        }
+      }
+  }
+
+
+
+if($bonne_reponse>$mauvaise_reponse && $mauvaise_reponse==0){
+  $point=1;
+}else{
+  $point=0;
 }
+$bonne_reponse=0;
+$mauvaise_reponse=0;
+return $point;
+
+
+}
+
+
+    // public function ValiditéQuestion(Question $question,Resultat $resultat,PropositionRepository $proposition): string
+    // {
+     
+    //     $po = $question->getPropositions();
+
+    //     $nbresp = 0;
+    //     foreach ($po as $value) {
+    //         dump($value->getId());
+          
+            // $propo = $proposition->findBy(
+            //         ['idResultat' => $resultat->getId()],
+            //         ['idProposition' => $qcmafficheentete],
+            //     );
+
+//            if (!empty($donnees[0]) )
+//            {
+//              $nbresp+=1;
+
+//            }
+//         }
+        
+        
+       
+//         if ($nbresp==0)
+//         {
+//            return 'Non';
+
+//         }else{
+//           return 'Oui';
+
+//         }
+
+//     }
+
+
+ }
+

@@ -1,37 +1,94 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Hello EleveController!{% endblock %}
-
 {% block body %}
-      <SECTION>
-       <CENTER> Affichage d'un QCM </CENTER>
+<div class="container">
+    <SECTION>
+        <CENTER> Affichage d'un QCM </CENTER>
+        <div class="d-flex p-2 justify-content-md-center">
+            <label class="mx-5"> QCM N°: {{ resultatseleve.qcm.id }}</label>
+            <label class="mx-5"> Libellé : {{ resultatseleve.qcm.libelleQcm }}</label>
+            <label class="mx-5">Thème : {{ resultatseleve.qcm.theme.description }}</label>
+            <label class="mx-5">Nombre de question : {{ resultatseleve.qcm.questions| length }}</label>
+        </div>
+        <form action="{{ path('eleve_realisation')}}" id="realiserqcm" method="post">
+            {% for quest in question %}
+            <div class="d-flex justify-content-between">
+                <label>
+                    Question N°{{ numQuestion}}
+                </label>
+                {{dump(quest.timeQuestion.timestamp )}}
+                <script>
+                    function pad(number) {
+
+                return (number < 10 ? '0' : '') + number;
+
+            }
+
+            console.log("su");
+            var minutes ={{"1500" | date("i")}} ;
+            var secondes = {{"1500" | date("s")}} ;  
+
+            var min = minutes;
+            var sec = secondes ;
+            var total_seconds =60*min + sec ;
+            console.log(total_seconds);
+            c_minutes = parseInt(total_seconds/60);
+            c_seconds = parseInt(total_seconds%60);
+            console.log(c_minutes);
+            console.log(c_seconds);
+            function CheckTime(){
+                 document.getElementById('chrono').innerHTML ='Temps restant : ' + pad(c_minutes) + ':' + pad(c_seconds)  ;
+                console.log('oui');
+                if(total_seconds <=0){
+                   
+                   document.getElementById("valider").setAttribute("name","passer");
+                   document.getElementById("valider").click();
+                   
+                        
+                }else{
+                    total_seconds --;
+                    c_minutes = parseInt(total_seconds/60);
+                    c_seconds = parseInt(total_seconds%60);
+                    setTimeout("CheckTime()",1000);
+
+                 }
+            }
+
+            function validerQcm(){
+
+                document.getElementById("valider").click();
+            }
 
 
 
 
-      
-       <label class="numq"> QCM N° </label> <label class="ml-5"> Libellé :   </label> <label class="ml-5">  Thème :   </label> <label class="ml-5"> Nombre de question :  </label> </br>
-       <form action="{{ path('eleve_realisation')}}" name="realiserqcm" method="post">
+        </script>
+                <label id="chrono">
+                    SSJSKJSJ
+                </label>
+            </div>
+            <div class="ml-2"> {{ quest.libelleQuestion }} </div> </br>
+            <div class="ml-5">
+                {% set indicepropo=0 %}
+                {% for propo in quest.propositions %}
+                <input type="hidden" value=" {{ resultatseleve.id }} " class="idresult " name="idresult">
 
-      
-          <div class="ml-5"></div></br>
+                <input type="hidden" value=" {{ quest.id }} " class="idquestprece " name="idquestprece">
 
-          <div  id="chrono"> </div>
-          {% for quest in question %}
-          <div  class="qtion"> {{ quest.libelleQuestion }} </div> </br>
-          
-          <div class="prop">
-          {% for propo in quest.propositions %}
-            <input  type="hidden" value=" {{ resultatseleve.id }} " name="idresult">
-            <input  type="hidden" value=" {{ quest.id }} " name="idquestprece">
-             <input  type="checkbox"  name= > {{ propo.libelleproposition }} </br>
-         {% endfor %}
-             
-         </div>
-       
-       <CENTER>  <input type="hidden" value= name="effectuer"> </CENTER>
-       <CENTER>  <input type="submit" value="Valider" name="valider"> </CENTER>
-       {% endfor %}
-     </form>
-   </SECTION>
+                <input type="hidden" class="num_question " value=" {{ numQuestion }} " name="num_question">
+
+                <input type="hidden" value=" {{ propo.id }} " name="idproposition[]" > 
+
+                <input type="hidden" name="propoeleve[{{ indicepropo}}]" > 
+
+                <input type="checkbox" name="propoeleve[{{ indicepropo}}]" > {{ propo.libelleproposition }} </br>
+                {% set indicepropo = indicepropo+1  %}
+                {% endfor %}
+            </div>
+            <CENTER> <input type="hidden" value= name= {{ csrf_token('qcm_realisation_' ~ quest.id )}} > </CENTER>
+            <CENTER> <input type="submit" value="Valider" onclick="validerQcm()" id="valider" name="valider"> </CENTER>
+            {% endfor %}
+        </form>
+    </SECTION>
+</div>
 {% endblock %}

@@ -3,39 +3,39 @@
 
 {% block body %}
 
-    <div class="container">
+<div class="container">
 
 
-        <SECTION>
-          <CENTER> Résultats par élève </CENTER>
+    <SECTION>
+      <CENTER> Résultats par élève </CENTER>
 
-          <div class="mt-3 table-responsive ">
-              <table class="table">
+        <div class="mt-3 table-responsive ">
+            <table class="table">
                 <thead>
-                  <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Nom</th>
-                    <th scope="col">Prénom</th>
-                    <th scope="col">Moyenne</th>
-                    <th scope="col">Disponibles</th>
-                    <th scope="col">Réalisés</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for resultat in resultats %}
-                  <tr>
-                    <th scope="row">{{resultat.idEleve}}</th>
-                    <td>{{resultat.nom}}</td>
-                    <td>{{resultat.prenom}}</td>
-                    <td>{{resultat.moyenne}}</td>
-                    <td>{{resultat.nbrealise }}</td>
-                    <td>{{ resultat.nbQcmRea == null ? 0 :  resultat.nbQcmRea }}</td>
-                </tr>
-            {% endfor %}  
-        </tbody>
-    </table>
-</div>
-</SECTION>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Moyenne</th>
+                        <th scope="col">Disponibles</th>
+                        <th scope="col">Réalisés</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for resultat in resultats %}
+                        <tr>
+                            <th scope="row">{{resultat.idEleve}}</th>
+                            <td>{{resultat.nom}}</td>
+                            <td>{{resultat.prenom}}</td>
+                            <td>{{resultat.moyenne}}</td>
+                            <td>{{resultat.nbrealise }}</td>
+                            <td>{{ resultat.nbQcmRea == null ? 0 :  resultat.nbQcmRea }}</td>
+                        </tr>
+                    {% endfor %}  
+                </tbody>
+            </table>
+        </div>
+    </SECTION>
 </div>
 
 

@@ -4,50 +4,61 @@
 
 {% block body %}
 <form action="{{ path('formateur_afecttUti')}}"  method="post" name="affecter">
-  <div class="qcm"> 
+    <div class="qcm"> 
     Sélection d'un QCM : <select class="w-50 form-control-sm" name="qcm">
       {% for qcm in qcms %}
-        <option value="{{qcm.id}}"> {{qcm.theme.description}}  : {{qcm.libelleqcm}} </option>
+      <option value="{{qcm.id}}"> {{qcm.theme.description}}  : {{qcm.libelleqcm}} </option>
 
       {% endfor %}
-    
 
 
-  </select> </br>
-  </div>
 
-  <div class="date">
+        </select> </br>
+</div>
+
+<div class="date">
     Date : <input name="date" type="date" value="{{ "now"|date("Y-m-d") }}" >
 
-  </div>
+</div>
 
-    <div class="table-g">
+<div class="container">
 
-        <table >
-          <tr class="t_entete">
-            <th class="col-2">Identifiant</th>
-            <th class="col-2">Nom</th>
-            <th class="col-2">Prénom</th>
-            <th class="col-2">Type</th>
-            <th class="col-2">Affectation</th>
-          </tr>
-          {% for eleve in eleves %}
 
+    <SECTION>
+      <CENTER> Résultats par élève </CENTER>
+
+      <div class="mt-3 table-responsive ">
+        <table class="table">
+          <thead>
             <tr>
-              <td class="center_element"> {{eleve.id}} </td>
-              <td> {{eleve.nom}} </td>
-              <td> {{eleve.prenom}} </td>
-              <td> {{eleve.type}} </td>
-              <td class="center_element"><input  type="checkbox"  name="utili[]" value="{{eleve.id}}"
-                ></td>
-              </tr>
-            {% endfor %} 
+              <th scope="col">Id</th>
+              <th scope="col">Nom</th>
+              <th scope="col">Prénom</th>
+              <th scope="col">Type</th>
+              <th scope="col">Affectation</th>
+          </tr>
+      </thead>
+      <tbody>
+        {% for eleve in eleves %}
+        <tr>
+          <th scope="row">{{eleve.id}}</th>
+          <td>{{eleve.nom}}</td>
+          <td>{{eleve.prenom}}</td>
+          <td>{{eleve.type}}</td>
+          <td class="center_element">
+            <input  type="checkbox"  name="utili[]" value="{{eleve.id}}">
+        </td>
+    </tr>
+    {% endfor %}  
+</tbody>
+</table>
+</div>
+</SECTION>
+</div>
 
-        </table>
 
-    </div>
 
-  <CENTER> <input type="submit" value="Valider" name="affecter"> </CENTER>	
+<CENTER> <input type="submit" value="Valider" name="affecter"> </CENTER>	
 </form>
 
 {% endblock %}

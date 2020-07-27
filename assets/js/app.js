@@ -12,6 +12,13 @@ import '../css/app.css';
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
  import $ from 'jquery';
 
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 
 require('bootstrap');
+
+ // loads the jquery package from node_modules
+// var $ = require('jquery');
+
+// import the function from greet.js (the .js extension is optional)
+// ./ (or ../) means to look for a local file
+var timer = require('./timer');
+

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Resultat;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -164,5 +165,24 @@ class Resultat
         }
 
         return $this;
+    }
+
+
+
+    public function CalculNoteQCM(Resultat $result)
+    {
+        $quest = $result->getQcm()->getQuestions();
+        
+        $point_total =0 ;
+        $nbqs = count($quest);
+
+        foreach ($quest as  $question) {
+            $point_total +=$question->CalculPointsQuestion($question,$result);
+            // dump('point pour quest'.$point_total);
+        }
+      
+        $note = (floatval($point_total) * 20)/floatval($nbqs);
+        return number_format($note,2) ;
+
     }
 }
