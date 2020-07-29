@@ -24,7 +24,7 @@ class Proposition
     private $libelleProposition;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="boolean")
      */
     private $resultatVraiFaux;
 

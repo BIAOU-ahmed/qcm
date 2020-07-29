@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Resultat;
+use App\Repository\ReponseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -169,7 +170,7 @@ class Resultat
 
 
 
-    public function CalculNoteQCM(Resultat $result)
+    public function CalculNoteQCM(Resultat $result, ReponseRepository $reponse)
     {
         $quest = $result->getQcm()->getQuestions();
         
@@ -177,12 +178,31 @@ class Resultat
         $nbqs = count($quest);
 
         foreach ($quest as  $question) {
-            $point_total +=$question->CalculPointsQuestion($question,$result);
-            // dump('point pour quest'.$point_total);
+            $point_total +=$question->CalculPointsQuestion($question,$result,$reponse);
+            
         }
       
         $note = (floatval($point_total) * 20)/floatval($nbqs);
         return number_format($note,2) ;
 
+    }
+
+    public function NbQuestValider(Resultat $result, ReponseRepository $reponse)
+    {
+        $questions = $result->getQcm()->getQuestions();
+        $nbvalider = 0;
+
+        foreach ($questions as  $question) {
+
+            if($question->CalculPointsQuestion($question,$result,$reponse)==1){
+                
+                $nbvalider ++;
+            }
+
+            
+        }
+
+       dump($nbvalider);
+        return $nbvalider;
     }
 }

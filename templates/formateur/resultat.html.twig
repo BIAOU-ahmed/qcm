@@ -22,13 +22,15 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% dump(resultats) %}
                     {% for resultat in resultats %}
+                    {% set qcmdispo = resultat.nbrealise - resultat.nbQcmRea%}
                         <tr>
-                            <th scope="row">{{resultat.idEleve}}</th>
+                            <th scope="row">{{  resultat.idEleve}}</th>
                             <td>{{resultat.nom}}</td>
                             <td>{{resultat.prenom}}</td>
                             <td>{{resultat.moyenne}}</td>
-                            <td>{{resultat.nbrealise }}</td>
+                            <td>{{qcmdispo }}</td>
                             <td>{{ resultat.nbQcmRea == null ? 0 :  resultat.nbQcmRea }}</td>
                         </tr>
                     {% endfor %}  

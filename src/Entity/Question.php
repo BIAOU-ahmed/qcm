@@ -6,6 +6,7 @@ use App\Entity\Proposition;
 use App\Entity\Question;
 use App\Entity\Reponse;
 use App\Entity\Resultat;
+use App\Repository\ReponseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -126,93 +127,92 @@ class Question
     }
 
 
-public function CalculPointsQuestion(Question $question,Resultat $resultat)
+public function CalculPointsQuestion(Question $question,Resultat $resultat,ReponseRepository $rep)
  {
-   $po = $question->getPropositions();
-   $propoqcm = $question->getQcm();
+    $po = $question->getPropositions();
+    $propoqcm = $question->getQcm();
 
-    static $point;
-    static $reponse;
+    static $point=0;
     static $mauvaise_reponse=0;
     static $bonne_reponse=0;
     foreach ($po as  $value) {
-        foreach ($value->getReponses() as  $reps) {
-            if ($reps->getIdResultat()->getId()== $resultat->getId() && $reps->getIdProposition()->getId() == $value->getId()) {
-                $reponse =$reps;
-            }
-        }
+        $reponse = $rep->findBy(
+                ['idResultat' => $resultat,
+                 'idProposition' => $value
+                    ],
+                );
         
         
 
         if ($reponse == [])
         { 
+            
             $point = 0;
-
+            dump('pas reponse'.$point);
             return $point;
 
+            dump('pas reponse'.$point);
         }else{
-            dump('val resu '.$value->getResultatVraiFaux());
-            dump($reponse);
-            if($value->getResultatVraiFaux()==$reponse->getReponseEleve()){
-               
+           
+            if($value->getResultatVraiFaux()==$reponse[0]->getReponseEleve()){
               $bonne_reponse +=1 ;
-              // dump('bon rep '.$bonne_reponse);
+              dump('bon'.$bonne_reponse);
 
-        }else{
-            $mauvaise_reponse++;
-            // dump('faux rep '.$mauvaise_reponse);
+            }else{
+                $mauvaise_reponse++;
+            }
         }
-      }
-  }
+    }
+
+    dump('toto');
+
+    if($bonne_reponse>$mauvaise_reponse && $mauvaise_reponse==0){
+      $point=1;
+    }else{
+      $point=0;
+    }
+    $bonne_reponse=0;
+    $mauvaise_reponse=0;
+
+    return $point;
 
 
-
-if($bonne_reponse>$mauvaise_reponse && $mauvaise_reponse==0){
-  $point=1;
-}else{
-  $point=0;
 }
-$bonne_reponse=0;
-$mauvaise_reponse=0;
-return $point;
 
 
-}
-
-
-    // public function ValiditéQuestion(Question $question,Resultat $resultat,PropositionRepository $proposition): string
-    // {
+    public function ValiditéQuestion(Question $question,Resultat $resultat, ReponseRepository $reponse): string
+    {
      
-    //     $po = $question->getPropositions();
+        $po = $question->getPropositions();
 
-    //     $nbresp = 0;
-    //     foreach ($po as $value) {
-    //         dump($value->getId());
+        $nbresp = 0;
+        foreach ($po as $value) {
+            
           
-            // $propo = $proposition->findBy(
-            //         ['idResultat' => $resultat->getId()],
-            //         ['idProposition' => $qcmafficheentete],
-            //     );
+            $reponse_eleve = $reponse->findBy(
+                    ['idResultat' => $resultat->getId(),
+                    'idProposition' => $value->getId()
+                ],
+                    
+                );
+            if ($reponse_eleve) 
+            {
+                $nbresp+=1;
 
-//            if (!empty($donnees[0]) )
-//            {
-//              $nbresp+=1;
-
-//            }
-//         }
+            }
+        }
         
         
        
-//         if ($nbresp==0)
-//         {
-//            return 'Non';
+        if ($nbresp==0)
+        {
+           return 'Non';
 
-//         }else{
-//           return 'Oui';
+        }else{
+          return 'Oui';
 
-//         }
-
-//     }
+        }
+    }
 
 
  }

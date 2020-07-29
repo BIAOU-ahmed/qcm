@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200723142301 extends AbstractMigration
+final class Version20200727230419 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,7 +22,7 @@ final class Version20200723142301 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE proposition CHANGE question_id question_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE proposition CHANGE question_id question_id INT DEFAULT NULL, CHANGE resultat_vrai_faux resultat_vrai_faux TINYINT(1) NOT NULL');
         $this->addSql('ALTER TABLE qcm CHANGE autheur_id autheur_id INT DEFAULT NULL, CHANGE theme_id theme_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE question CHANGE qcm_id qcm_id INT DEFAULT NULL, CHANGE id_question_precedent id_question_precedent INT DEFAULT NULL');
         $this->addSql('ALTER TABLE resultat CHANGE eleve_id eleve_id INT DEFAULT NULL, CHANGE qcm_id qcm_id INT DEFAULT NULL, CHANGE enseignant_id enseignant_id INT DEFAULT NULL, CHANGE realise_at realise_at DATETIME DEFAULT NULL, CHANGE note note NUMERIC(5, 2) DEFAULT NULL');
@@ -34,7 +34,7 @@ final class Version20200723142301 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE proposition CHANGE question_id question_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE proposition CHANGE question_id question_id INT DEFAULT NULL, CHANGE resultat_vrai_faux resultat_vrai_faux INT NOT NULL');
         $this->addSql('ALTER TABLE qcm CHANGE autheur_id autheur_id INT DEFAULT NULL, CHANGE theme_id theme_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE question CHANGE qcm_id qcm_id INT DEFAULT NULL, CHANGE id_question_precedent id_question_precedent INT DEFAULT NULL');
         $this->addSql('ALTER TABLE resultat CHANGE enseignant_id enseignant_id INT DEFAULT NULL, CHANGE eleve_id eleve_id INT DEFAULT NULL, CHANGE qcm_id qcm_id INT DEFAULT NULL, CHANGE realise_at realise_at DATETIME DEFAULT \'NULL\', CHANGE note note NUMERIC(5, 2) DEFAULT \'NULL\'');

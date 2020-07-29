@@ -24,7 +24,7 @@ class Reponse
     private $idProposition;
 
     /**
-     * @ORM\Column(type="binary")
+     * @ORM\Column(type="boolean")
      */
     private $reponseEleve;
 

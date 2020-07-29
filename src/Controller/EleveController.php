@@ -7,6 +7,7 @@ use App\Repository\PropositionRepository;
 use App\Repository\QuestionRepository;
 use App\Repository\ReponseRepository;
 use App\Repository\ResultatRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,23 +29,29 @@ class EleveController extends AbstractController
 				);
         return $this->render('eleve/index.html.twig', [
             'controller_name' => 'EleveController',
-            'resultatseleve' => $resultateleve
+            'resultatseleves' => $resultateleve
         ]);
     }
     /**
      * @Route("/synthese", name="synthese")
      */
-    public function synthese( ResultatRepository $resultat)
+    public function synthese( ResultatRepository $resultat, ReponseRepository $reponse)
     {
-    	
+    	if (isset($_POST['Afficher'])) {
+
+            $resultateleve = $resultat->find($_POST['idresult'] );
+        }
+
         return $this->render('eleve/synthese.html.twig', [
             'controller_name' => 'EleveController',
+            'resu' => $resultateleve, 
+            'reponse' => $reponse
         ]);
     }
     /**
      * @Route("/realisation", name="realisation")
      */
-    public function realisationqcm(Request $request,ResultatRepository $resultat,PropositionRepository $propo, QuestionRepository $quest, EntityManagerInterface $em)
+    public function realisationqcm(Request $request,ResultatRepository $resultat,PropositionRepository $propo, QuestionRepository $quest, EntityManagerInterface $em, ReponseRepository $repon)
     {
        
        
@@ -55,7 +62,7 @@ class EleveController extends AbstractController
         
 
 
-        dd($result->CalculNoteQCM( $result));
+        
     	if (isset($_POST['passer'])) {
 	    	
 	    	$questPrec = $_POST['idquestprece'];
@@ -97,11 +104,10 @@ class EleveController extends AbstractController
                 $countidpropo++;
             }
             
-            dump('resu'.$_POST['num_question'],'to'.$_POST['idresult'],'ti'.$_POST['idquestprece']);
             $questPrec = $_POST['idquestprece'];
             $numQuestion = (int)$_POST['num_question']+1;
 
-            dump($questPrec);
+            
         }
 
         $question = $quest->findBy(
@@ -109,16 +115,24 @@ class EleveController extends AbstractController
                  'qcm' => $result->getQcm()
                     ],
                 );
-        
     	if ($question==[]) {
             
             $result->setRealiseAt(new \DateTime())
-            ->setNote($question[0]->ValiditéQuestion($question[0], $result, $propo))
+            ->setNote($result->CalculNoteQCM( $result,$repon))
             ;
-            dd($result);
+            $em->flush();
+
+            $eleve = $result->getEleve();
+
+            $nbQcmRealise = $resultat->CompteNbQCMRéalisés($result->getEleve());
+
+            $eleve->setNbQcmRealises($nbQcmRealise)
+            ->setMoyenneQcm($resultat->CalculMoyenneQCM($result->getEleve(), $nbQcmRealise))
+            ;
+            $em->flush();
+            // dd($resultat->CompteNbQCMRéalisés($result->getEleve()));
     		
-			return $this->redirectToRoute('eleve_synthese');
-    	}
+		}
     	return $this->render('eleve/realisationqcm.html.twig', [
             'controller_name' => 'EleveController',
             'resultatseleve' => $result,

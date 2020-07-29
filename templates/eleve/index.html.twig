@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for resultateleve in resultatseleve %}
+                    {% for resultateleve in resultatseleves %}
                       <tr>
                         <th scope="row">{{ resultateleve.id }}
 
@@ -51,8 +51,8 @@
                         </td>
                         <td>
                             {% if resultateleve.realiseAt is not null %}
-                                <form action="synthese.php" name="Afficher" method="post" >
-                                    <CENTER>    <input type="hidden" value=> </CENTER>
+                                <form action="{{ path('eleve_synthese')}}" name="Afficher" method="post" >
+                                    <CENTER>     <input type="hidden" value="{{ resultateleve.id }}"name="idresult" > </CENTER>
                                     <CENTER>    <input type="submit" value="Afficher" name="Afficher"> </CENTER>
                                 </form>
 

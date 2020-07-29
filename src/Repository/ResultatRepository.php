@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Resultat;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * @method Resultat|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,6 +19,44 @@ class ResultatRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Resultat::class);
     }
+
+    
+    public function CompteNbQCMRéalisés($eleve): int
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT COUNT(r)
+            FROM App\Entity\Resultat r
+            WHERE r.Eleve = :eleve
+            AND r.realiseAt IS NOT NULL'
+        )->setParameter('eleve', $eleve);
+
+        // returns an array of Product objects
+        return $query->getSingleScalarResult();
+    }
+    
+    public function CalculMoyenneQCM($eleve,$nbqcmrea)
+    {
+
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT SUM(r.note)
+            FROM App\Entity\Resultat r
+            WHERE r.Eleve = :eleve'
+        )->setParameter('eleve', $eleve);
+
+        
+        if(floatval($nbqcmrea)){
+
+        $moyenne = floatval ($query->getSingleScalarResult())/floatval($nbqcmrea) ;
+
+        }
+        return $moyenne;
+
+    }
+
 
     // /**
     //  * @return Resultat[] Returns an array of Resultat objects

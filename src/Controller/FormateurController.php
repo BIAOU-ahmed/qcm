@@ -55,10 +55,10 @@ class FormateurController extends AbstractController
 
     	$resultatseleve = $user->findAllResultat();
 
-    	dump($resultatseleve);
+    	
     	return $this->render('formateur/resultat.html.twig',[
     		'controller_name' => 'BlogController',
-    		'resultats' => $resultatseleve
+    		'resultats' => $resultatseleve,
     	]);
     }
 
@@ -77,19 +77,15 @@ class FormateurController extends AbstractController
     	if (isset($_POST['affecter'])) {
     		if (isset($_POST['utili'])) {
 
-    			dump($_POST['qcm']);
     			foreach($_POST['utili'] as $valeur){
 
     				$time = new \DateTime($_POST['date']);
     				$id = $_POST['utili'] ;
-    				dump($valeur);
+    				
     				$eleve = $user->find($valeur);
-    				dump($eleve);
     				$newQcm = $qcm->find($_POST['qcm']);
-    				dump($newQcm);
-    				dump($_POST['date']);
+    				
     				$enseignant = $this->getUser();
-    				dump($enseignant);
     				$resultat = new Resultat();
 
     				$resultat->setAffecttedAt($time)
@@ -97,7 +93,6 @@ class FormateurController extends AbstractController
     				->setEleve($eleve)
     				->setQcm($newQcm)
     				;
-    				dump($resultat);
 
     				$em->Persist($resultat);
     			}
@@ -179,20 +174,7 @@ class FormateurController extends AbstractController
 
 			// }
 
-    		$hash = $encoder->encodePassword($user,$user->getPassword());
-
-    		$user->setPassword($hash);
-
-    		if($user->getType()=='Formateur'){
-
-    			$user->setRoles(array('ROLE_ADMIN'));
-    		}
-    		elseif ($user->getType()=='Eleve') {
-
-    			$user->setRoles(array('ROLE_USER'));
-    		}
-
-
+    
     		$em->flush();
 
     		return $this->redirectToRoute('formateur_listUti');
